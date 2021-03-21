@@ -5,7 +5,7 @@
     <meta charset="utf-8">
     <!--style-->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <link rel="stylesheet" href="css/buystyle.css">
+    <link rel="stylesheet" href="../css/admin.css">
     <!-- ajax -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <!-- Popper JS -->
@@ -36,6 +36,9 @@
       </li>
       <li class="nav-item" style="margin-right: 10px;">
         <a class="nav-link" href="users.php">Vásárlók</a>
+      </li>
+      <li class="nav-item" style="margin-right: 10px;">
+        <a class="nav-link" href="login.php">Kilépés</a>
       </li>
     </ul><hr>
   </div>

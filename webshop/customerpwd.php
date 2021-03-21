@@ -54,22 +54,26 @@
           </li>
         </ul><hr> 
       </div>
-      <form action="registration.php" method="post">
-        <div class="container">
-          <div class="row-lg-6">
-            <div class="col">
-              <h5>Jelszó módosítása</h5>
-              <label for="password"><b>Jelszó</b></label>
-              <input class="form-control" placeholder="Jelszó" type="text" name="password" required> 
 
-              <label for="repassword"><b>Jelszó újra</b></label>
-              <input class="form-control" placeholder="Jelszó újra" type="text" name="repassword" required>
-              <hr class="mb-3">
-              <button type="submit" class="btn btn-lg btn-primary">Mentés</button>
-            </div>
-            <br>
-        </div>
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-sm-4 col-md-5 col-lg-8">
+        <form action="" method="post">
+          <div class="container">
+              <div class="form-group">
+                <label for="password"><b>Jelszó</b></label>
+                <input class="form-control" placeholder="Jelszó" type="text" name="password" required> 
+
+                <label for="repassword"><b>Jelszó újra</b></label>
+                <input class="form-control" placeholder="Jelszó újra" type="text" name="repassword" required>
+                <hr class="mb-3">
+                <button type="submit" class="btn btn-primary">Mentés</button>
+              </div>
+              <br>
+          </div>
+        </form>
       </div>
-    </form>
+    </div>
+  </div>
 </body>
 </html>

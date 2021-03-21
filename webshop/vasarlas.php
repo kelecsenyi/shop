@@ -66,8 +66,14 @@ $result = $db->query($sql);
             <div class="title">Ár szerint</div>
             <br>
             <div class="form-check">
-              <label class="form-check-label" for="price[1-3000]">
-               <input type="checkbox" class="form-check-input" id="price[1-3000]" name="price[1-3000]">1-3 000 Ft
+              <label class="form-check-label" for="price[0-2000]">
+               <input type="checkbox" class="form-check-input" id="price[0-2000]" name="price[0-2000]">0-2 000 Ft
+              </label>
+            </div>
+            <br>
+            <div class="form-check">
+              <label class="form-check-label" for="price[2000-3000]">
+               <input type="checkbox" class="form-check-input" id="price[2000-3000]" name="price[2000-3000]">2 000-3 000 Ft
               </label>
             </div>
             <br>
@@ -88,6 +94,12 @@ $result = $db->query($sql);
                <input type="checkbox" class="form-check-input" id="price[9000-12000]" name="price[9000-12000]">9 000-12 000 Ft
               </label>
             </div>
+            <br>
+            <div class="form-check">
+              <label class="form-check-label" for="price[12000-20000]">
+               <input type="checkbox" class="form-check-input" id="price[12000-20000]" name="price[12000-20000]">12 000-20 000 Ft
+              </label>
+            </div>
           </div>     
         </div>
       </div>
@@ -95,7 +107,7 @@ $result = $db->query($sql);
       <div class="col-sm-8 col-md-16">
           <div class="row products" id="products" style="margin-top: 0px;">
             <?php while($row = $result->fetch()):?>
-              <div class="col-sm-2 col-md-4" style="margin-bottom: 20px;">
+              <div class="col-sm-3 col-md-4" style="margin-bottom: 20px;">
             <?php include 'templates/card.php'?>
             </div>
           <?php endwhile;?>

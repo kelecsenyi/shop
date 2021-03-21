@@ -5,7 +5,7 @@
     <meta charset="utf-8">
     <!--style-->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <link rel="stylesheet" href="css/buystyle.css">
+    <link rel="stylesheet" href="../css/admin.css">
     <!-- ajax -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <!-- Popper JS -->
@@ -37,10 +37,57 @@
       <li class="nav-item" style="margin-right: 10px;">
         <a class="nav-link active" href="users.php">Vásárlók</a>
       </li>
+      <li class="nav-item" style="margin-right: 10px;">
+        <a class="nav-link" href="login.php">Kilépés</a>
+      </li>
     </ul><hr>
-  </div>
-  <div class="container">
-    
+
+    <div class="row">
+      <div class="col sm-9 col-md-15 col-lg-15">
+        <div class="section-container">
+
+          <section class="">
+            <div class="title">
+              <div class="row">
+                <div class="OrderId">felhasználó azonosítója</div>
+                <div class="Items"> neve</div>
+              </div>
+            </div>
+            <div class="content">
+              <div class="orderdata">
+                <div class="row">
+                  <div class="col-sm-3 col-md-4">
+                    <h4>Számlázási adatai</h4>
+                    <p>
+                      <b><!-- php kód, megrendelő neve-->Kelecsényi Balázs</b>
+                      <br>
+                      <!--php kód, cím-->1174 Budapest Dózsa György utca 15.
+                      <br>
+                      <!--php kód, telefonszám-->12345678910
+                      <br>
+                      <!--php kód, adószám-->12345-43-1
+                      <br>
+                    </p>
+                  </div>
+                  <div class="col-sm-3 col-md-4">
+                    <h4>Szállítási adatai</h4>
+                    <p>
+                      <b><!-- php kód, megrendelő neve-->Kelecsényi Balázs</b>
+                      <br>
+                      <!--php kód, cím-->1174 Budapest Dózsa György utca 15.
+                      <br>
+                      <!--php kód, telefonszám-->12345678910
+                      <br>
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+          
+        </div>
+      </div>
+    </div>
   </div>
 </body>
 </html>

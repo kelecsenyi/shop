@@ -44,12 +44,14 @@ ini_set('display_errors','on');
       </ul>
     </nav>
   </header>
-  
+
+ <div class="container">
+  <div class="row justify-content-center">
+    <div class="col-sm-4 col-md-5 col-lg-8">
       <form action="registration.php" method="post">
         <div class="container">
           <h1>Regisztráció új vásárlóknak</h1>
-          <div class="row-lg-6">
-            <div class="col">
+            <div class="form-group">
               <h5>Kapcsolattartó</h5>
               <hr class="mb-3">
               <label for="name"><b>Név</b></label>
@@ -68,7 +70,7 @@ ini_set('display_errors','on');
               <input class="form-control" placeholder="Jelszó újra" type="text" name="repassword" required>
             </div>
 
-            <div class="col py-2">
+            <div class="form-group">
               <h5>Szállítási adatok</h5>
               <hr class="mb-3">
 
@@ -81,7 +83,8 @@ ini_set('display_errors','on');
               <label for="address"><b>utca, házszám</b></label>
               <input class="form-control" placeholder="utca, házszám" type="text" name="address" required>
             </div>
-            <div class="col">
+            
+            <div class="form-group">
                 <h5>Számlázási adatok</h5>
                 <hr class="mb-3">
                 <label for="szamname"><b>Számlázási név</b></label>
@@ -96,13 +99,18 @@ ini_set('display_errors','on');
                 <label for="address"><b>utca, házszám</b></label>
                 <input class="form-control" placeholder="utca, házszám" type="text" name="address" required>
 
+                <label for="taxnumber"><b>Adószám</b></label>
+                <input class="form-control" placeholder="Adószám" type="text" name="taxnumber" required>
+
                 <hr class="mb-3">
                 <button type="submit" class="btn btn-primary">Regisztráció</button>
-                <a href="belepes.php" class="btn btn-success btn">Mégse</a>
+                <a href="belepes.php" class="btn btn-success">Mégse</a>
             </div>
             <br>
         </div>
-      </div>
-    </form>
+      </form>
+    </div>
+  </div> 
+</div>
 </body>
 </html>

@@ -47,7 +47,7 @@ ini_set('display_errors','on');
 
   <div class="container">
     <div class="row justify-content-center">
-      <div class="col-lg-14">
+      <div class=" col-sm-12 col-md-12 col-lg-14">
         <div class="table-responsive mt-2">
           <table class="table table-bordered table-striped text-center">
             <thead>
@@ -78,8 +78,8 @@ ini_set('display_errors','on');
               <tr>
                 <td><img src="?= $row['cimage']?>" width="50"></td>
                 <td><?= $row['cname']?></td>
-                <td><i></i><?= number_format($row['cprice'],2);?></td>
                 <td><input type="number" class="form-control itemQty" value="<?= $row['cquantity'] ?>" style="width: 70xp;"></td>
+                <td><i></i><?= number_format($row['cprice'],2);?></td>
                 <td>
                   <a href="action.php?clear=<?= $row['cname'] ?>" class="text-danger lead" onclick="return confirm('Biztosan törli ezt a terméket?');"><i class="fas fa-trash-alt"></i></a>
                 </td>
