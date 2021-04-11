@@ -23,18 +23,32 @@
 </header>
 <body>
   <div class="container">     
-    <form action="index.php" method="POST">
+    <form action="login.inc.php" method="POST">
       <div class="form-row">
-         <div class="col-lg">
-          <h4 style="margin-top: 30px;">Bejelentkezés</h4>
+         <div class="col-sm-6 col-md-8 col-lg-12">
+          <h4 class="mt-5">Bejelentkezés</h4>
             <label for="email"><b>Felhasználónév</b></label>
             <input type="text" class="form-control" placeholder="Felhasználónév" name="username" required>
             <label for="password"><b>Jelszó</b></label>
             <input type="password" class="form-control" placeholder="Jelszó" name="password" required><br>
-            <button type="submit" name="gomb" class="btn btn-success ">Belépés</button>
+            <button type="submit" name="button" class="btn btn-success ">Belépés</button>
           </div>
       </div>
     </form>
+
+    <?php
+        if (isset($_GET["error"])) {
+           if ($_GET["error"]=="emptyinput") {
+             echo"<h4>Minden mezőt töltsön ki!</h4>";
+           }
+          elseif ($_GET["error"]=="nouser") {
+             echo"<h4>Nincs ilyen felhasználó!</h4>";
+           }
+           elseif ($_GET["error"]=="wrongpassword") {
+             echo"<h4>Helytelen jelszó!</h4>";
+           }
+         } 
+        ?>
   </div>
 </body>
 </html>

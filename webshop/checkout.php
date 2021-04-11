@@ -1,8 +1,23 @@
 <?php
 error_reporting(-1);
 ini_set('display_errors','on');
-?>
+session_start();
+if (isset($_SESSION["id"])) {
 
+}
+else
+{
+  if (isset($_SESSION["currentuser"])) {
+      
+  }
+  else
+  {
+      header('location: cart.php');
+      exit();
+  }
+
+}
+?>
 <!DOCTYPE html>
 <html lang="hu" dir="ltr">
   <head>
@@ -11,6 +26,8 @@ ini_set('display_errors','on');
     <!--style-->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
     <link rel="stylesheet" href="css/checkoutstyle.css">
+    <!-- jQuery first-->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
     <!-- ajax -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <!-- Popper JS -->
@@ -22,105 +39,120 @@ ini_set('display_errors','on');
   </head>
 
 <body>
-  <header>
-    <nav class="navbar navbar-expand bg-dark navbar-dark">
-      <a class="navbar-brand" href="index.php"> WEBARC WEBÁRUHÁZ</a>
-      
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <a class="navbar-brand" href="index.php">WEBARC WEBÁRUHÁZ</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false"aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
       <ul class="navbar-nav">
-        <li class="nav-item">
-          <a class="nav-link" href="index.php">Főoldal</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="belepes.php">Belépés</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="vasarlas.php">Vásárlás</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="cart.php">
-            <i class="fas fa-shopping-basket"></i>Kosár <span id="cart_count" class="text-danger bg-light">0</span>
-          </a>
-        </li>
+          <li class="nav-item">
+            <a class="nav-link" href="index.php">Főoldal</a>
+          </li>
+          <?php
+          if (isset($_SESSION["id"])) 
+          {
+             echo '<li class="nav-item"><a class="nav-link" href="indexcustomer.php"> Profilom</a></li>';
+           }
+           else
+           {
+            echo'<li class="nav-item"><a class="nav-link" href="belepes.php"> Belépés</a></li>';
+           }
+          ?>
+          <li class="nav-item">
+            <a class="nav-link" href="vasarlas.php">Vásárlás</a>
+          </li>
+          <li class="nav-item">        
+            <a class="nav-link" href="cart.php">
+              <i class="fas fa-shopping-basket"></i>Kosár <span id="cart-result"></span>
+            </a>
+          </li>
+          <li class="nav-item"><a class="nav-link" href="logout.inc.php">
+          <?php
+          if (isset($_SESSION["id"])) {
+             echo " Kilépés";
+           } 
+          ?>
+          </a></li>
       </ul>
-    </nav>
-  </header>
+    </div>
+  </nav>
 
   <div class="container">
     <div class="row justify-content-center">
-      <div class="col-sm-4 col-md-5 col-lg-8" id="order">
-        <h4 class="text-center text-info p-2">Rendelés véglegesítése</h4>
+      <div class="col-lg-6 px-4 pb-4" id="order">
+        <h4 class="text-center text-info p-2">Rendelés véglegesítése!</h4>
         <div class="jumbotron p-3 mb-2 text-center">
-          <h6 class="lead"><b>Kosár tartalma: </b><!--php kód--></h6>
-          <h5><b>Fizetendő összeg: </b><!--php kód--></h5>
+          <h6 class="lead"><b>Termék(ek) : </b><?php $allItems; ?></h6>
+          <h6 class="lead"><b>Szállítási költség : </b>Ingyenes</h6>
+          <h5><b>Végösszeg : </b><?php number_format($grand_total) ?></h5>
         </div>
-        <form action="" method="post" id="placeorder">
-          <div class="container">
-             <div class="form-group">
-                <h5>Válassza ki hogyan fizetne:</h5>
-                <hr class="mb-3">
-                <select name="pays" class="custom-select">
-                  <option value="utanvet">Utánvét</option>
-                  <option value="online">Online bankkártya</option>
-                  <option value="eloreutalas">Előre utalás</option>
-                </select>
-              </div>
-
-              <div class="form-group">
-                <h5>Kapcsolattartó adatai</h5>
-                <hr class="mb-3">
-                <label for="name"><b>Név</b></label>
-                <input class="form-control" placeholder="Név" type="text" name="name" required>
-
-                <label for="email"><b>Email</b></label>
-                <input class="form-control" placeholder="Email" type="text" name="email" required> 
-
-                <label for="mobile"><b>Mobil</b></label>
-                <input class="form-control" placeholder="Mobil" type="text" name="mobil" required>
-              </div>
-
-              <div class="form-group">
-                <h5>Szállítási adatok</h5>
-                <hr class="mb-3">
-
-                <label for="postcode"><b>Irányítószám</b></label>
-                <input class="form-control" placeholder="Irányítószám" type="text" name="postcode" required>
-
-                <label for="city"><b>Város</b></label>
-                <input class="form-control" placeholder="Város" type="text" name="city" required>
-
-                <label for="address"><b>utca, házszám</b></label>
-                <input class="form-control" placeholder="utca, házszám" type="text" name="address" required>
-              </div>
-
-              <div class="form-group">
-                <h5>Számlázási adatok</h5>
-                <hr class="mb-3">
-                <label for="szamname"><b>Számlázási név</b></label>
-                <input class="form-control" placeholder="Számlázási név" type="text" name="szamname" required>
-
-                <label for="szampostcode"><b>Irányítószám</b></label>
-                <input class="form-control" placeholder="Irányítószám" type="text" name="szampostcode" required>
-
-                <label for="city"><b>Város</b></label>
-                <input class="form-control" placeholder="Város" type="text" name="city" required>
-
-                <label for="address"><b>utca, házszám</b></label>
-                <input class="form-control" placeholder="utca, házszám" type="text" name="address" required>
-
-                <label for="taxnumber"><b>Adószám</b></label>
-                <input class="form-control" placeholder="Adószám" type="text" name="taxnumber" required>
-
-                <hr class="mb-3">
-                <button type="submit" class="btn btn-primary">Megrendelem!</button>
-                <a href="cart.php" class="btn btn-success">Vissza a kosárhoz!</a>
-              </div>
-              <br>
-            </div>
-          
+        <form action="" method="post" id="placeOrder">
+          <input type="hidden" name="products" value="<?= $allItems; ?>">
+          <input type="hidden" name="grand_total" value="<?= $grand_total; ?>">
+          <div class="form-group">
+            <input type="text" name="name" class="form-control" placeholder="Enter Name" required>
+          </div>
+          <div class="form-group">
+            <input type="email" name="email" class="form-control" placeholder="Enter E-Mail" required>
+          </div>
+          <div class="form-group">
+            <input type="tel" name="phone" class="form-control" placeholder="Enter Phone" required>
+          </div>
+          <div class="form-group">
+            <input name="address" class="form-control" placeholder="Enter Delivery Address Here..."></input>
+          </div>
+          <h6 class="text-center lead">Fizetés mód</h6>
+          <div class="form-group">
+            <select name="pmode" class="form-control">
+              <option value="" selected disabled>-Válassza ki hogyan fizet-</option>
+              <option value="cod">Utánvét</option>
+              <option value="netbanking">Online bankkártya</option>
+              <option value="cards">Bankkártya</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <input type="submit" name="submit" value="Place Order" class="btn btn-danger btn-block">
+          </div>
         </form>
       </div>
     </div>
   </div>
   
+ <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js'></script>
+  <script src='https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.2/js/bootstrap.min.js'></script>
+
+  <script type="text/javascript">
+  $(document).ready(function() {
+
+    $("#placeOrder").submit(function(e) {
+      e.preventDefault();
+      $.ajax({
+        url: 'action.php',
+        method: 'post',
+        data: $('form').serialize() + "&action=order",
+        success: function(response) {
+          $("#order").html(response);
+        }
+      });
+    });
+
+    
+    filter_cart();
+      function filter_cart()
+      {
+          var action = 'cart_item';
+          $.ajax({
+              url:"action.php",
+              method:"POST",
+              data:{action:action},
+              success:function(data){
+             $('#cart-result').html(data);
+              }
+          });
+      }
+  });
+  </script>
+
 </body>
 </html>

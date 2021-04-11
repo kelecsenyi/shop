@@ -1,6 +1,13 @@
 <?php
 error_reporting(-1);
 ini_set('display_errors','on');
+session_start();
+if (isset($_SESSION["id"])) 
+    {}
+  else
+  {
+    header('location: cart.php');
+  }
 ?>
 
 <!DOCTYPE html>
@@ -14,6 +21,8 @@ ini_set('display_errors','on');
     <link rel="stylesheet" href="css/succespay.css">
     <!-- jQuery first-->
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <!-- ajax -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <!-- Popper JS -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
     <!-- Latest compiled JavaScript -->
@@ -23,28 +32,44 @@ ini_set('display_errors','on');
   </head>
 
 <body>
-  <header>
-    <nav class="navbar navbar-expand bg-dark navbar-dark">
-      <a class="navbar-brand" href="index.php">WEBARC WEBÁRUHÁZ</a>
-      
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <a class="navbar-brand" href="index.php">WEBARC WEBÁRUHÁZ</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false"aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
       <ul class="navbar-nav">
-        <li class="nav-item">
-          <a class="nav-link" href="index.php">Főoldal</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="belepes.php">Belépés</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="vasarlas.php">Vásárlás</a>
-        </li>
-        <li class="nav-item">        
-          <a class="nav-link" href="cart.php">
-            <i class="fas fa-shopping-basket"></i>Kosár <span id="cart_count" class="text-danger bg-light">0</span>
-          </a>
-        </li>
+          <li class="nav-item">
+            <a class="nav-link" href="index.php">Főoldal</a>
+          </li>
+          <?php
+          if (isset($_SESSION["id"])) 
+          {
+             echo '<li class="nav-item"><a class="nav-link" href="indexcustomer.php"> Profilom</a></li>';
+           }
+           else
+           {
+            echo'<li class="nav-item"><a class="nav-link" href="belepes.php"> Belépés</a></li>';
+           }
+          ?>
+          <li class="nav-item">
+            <a class="nav-link" href="vasarlas.php">Vásárlás</a>
+          </li>
+          <li class="nav-item">        
+            <a class="nav-link" href="cart.php">
+              <i class="fas fa-shopping-basket"></i>Kosár <span id="cart_count" class="text-danger bg-light">0</span>
+            </a>
+          </li>
+          <li class="nav-item"><a class="nav-link" href="logout.inc.php">
+          <?php
+          if (isset($_SESSION["id"])) {
+             echo " Kilépés";
+           } 
+          ?>
+          </a></li>
       </ul>
-    </nav>
-  </header>
+    </div>
+  </nav>
   
   <div class="container">
     <div class="col justify-content-center py-3">
