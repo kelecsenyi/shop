@@ -1,3 +1,12 @@
+<?php 
+session_start();
+if ($_SESSION['id']) {
+}
+else
+{
+  header("location: login.php");
+}
+?>
 <!DOCTYPE html>
 <html lang="hu" dir="ltr">
   <head>
@@ -5,7 +14,7 @@
     <meta charset="utf-8">
     <!--style-->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <link rel="stylesheet" href="../css/admin.css">
+    <link rel="stylesheet" href="../css/adminstyle.css">
     <!-- ajax -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <!-- Popper JS -->
@@ -37,9 +46,13 @@
       <li class="nav-item" style="margin-right: 10px;">
         <a class="nav-link active" href="users.php">Vásárlók</a>
       </li>
-      <li class="nav-item" style="margin-right: 10px;">
-        <a class="nav-link" href="login.php">Kilépés</a>
-      </li>
+      <li class="nav-item"><a class="nav-link" href="logout.inc.php">
+      <?php
+      if (isset($_SESSION["id"])) {
+         echo " Kilépés";
+       } 
+      ?>
+      </a></li>
     </ul><hr>
 
     <div class="row">
@@ -53,7 +66,7 @@
                 <div class="Items"> neve</div>
               </div>
             </div>
-            <div class="content">
+            <div class="content" id="hide">
               <div class="orderdata">
                 <div class="row">
                   <div class="col-sm-3 col-md-4">
@@ -84,7 +97,7 @@
               </div>
             </div>
           </section>
-          
+
         </div>
       </div>
     </div>

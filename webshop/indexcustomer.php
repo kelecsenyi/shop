@@ -1,3 +1,14 @@
+<?php 
+session_start();
+if ($_SESSION["id"]) {
+  echo $_SESSION["id"];
+  echo $_SESSION["password"];   
+}
+else
+{
+  header('location: belepes.php');
+}
+?>
 <!DOCTYPE html>
 <html lang="hu" dir="ltr">
   <head>
@@ -5,7 +16,9 @@
     <meta charset="utf-8">
     <!--style-->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <link rel="stylesheet" href="css/userstyle.css">
+    <link rel="stylesheet" href="css/userstl.css">
+    <!-- jQuery first-->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
     <!-- ajax -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <!-- Popper JS -->
@@ -17,28 +30,41 @@
   </head>
 
 <body>
-  <header>
-    <nav class="navbar navbar-expand bg-dark navbar-dark">
-      <a class="navbar-brand" href="index.php">WEBARC WEBÁRUHÁZ</a>
-      
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <a class="navbar-brand" href="index.php">WEBARC WEBÁRUHÁZ</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false"aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
       <ul class="navbar-nav">
-        <li class="nav-item">
-          <a class="nav-link" href="index.php">Főoldal</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="belepes.php">Kilépés</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="vasarlas.php">Vásárlás</a>
-        </li>
-        <li class="nav-item">        
-          <a class="nav-link" href="cart.php">
-            <i class="fas fa-shopping-basket"></i>Kosár <span id="cart_count" class="text-danger bg-light">0</span>
-          </a>
-        </li>
+          <li class="nav-item">
+            <a class="nav-link" href="index.php">Főoldal</a>
+          </li>
+          <li class="nav-item bg-secondary rounded"><a class="nav-link" href="indexcustomer.php">
+          <?php
+          if (isset($_SESSION["id"])) {
+             echo " Profilom";
+           } 
+          ?>
+          </a></li>
+          <li class="nav-item">
+            <a class="nav-link" href="vasarlas.php">Vásárlás</a>
+          </li>
+          <li class="nav-item">        
+            <a class="nav-link" href="cart.php">
+              <i class="fas fa-shopping-basket"></i>Kosár <span id="cart-result"></span>
+            </a>
+          </li>
+          <li class="nav-item"><a class="nav-link" href="logout.inc.php">
+          <?php
+          if (isset($_SESSION["id"])) {
+             echo " Kilépés";
+           } 
+          ?>
+          </a></li>
       </ul>
-    </nav>
-  </header>
+    </div>
+  </nav>
 
   <div class="container">
   <h2>Üdvözöljük</h2>
@@ -151,5 +177,23 @@
       </div>
     </div> 
   </div>
+<script type="text/javascript">
+  $(document).ready(function() {
+
+  filter_cart();
+   function filter_cart()
+    {
+        var action = 'cart_item';
+        $.ajax({
+            url:"action.php",
+            method:"POST",
+            data:{action:action},
+            success:function(data){
+                $('#cart-result').html(data);
+            }
+        });
+    }
+});
+</script>
 </body>
 </html>

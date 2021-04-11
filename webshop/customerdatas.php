@@ -1,3 +1,12 @@
+<?php 
+session_start();
+if ($_SESSION["id"]) {
+}
+else
+{
+  header('location: belepes.php');
+}
+?>
 <!DOCTYPE html>
 <html lang="hu" dir="ltr">
   <head>
@@ -5,9 +14,11 @@
     <meta charset="utf-8">
     <!--style-->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
-    <link rel="stylesheet" href="css/customer.css">
+     <link rel="stylesheet" href="css/customersitestyle.css">
     <!-- jQuery first-->
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <!-- ajax -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <!-- Popper JS -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
     <!-- Latest compiled JavaScript -->
@@ -17,28 +28,41 @@
   </head>
 
 <body>
-  <header>
-    <nav class="navbar navbar-expand bg-dark navbar-dark">
-      <a class="navbar-brand" href="index.php">WEBARC WEBÁRUHÁZ</a>
-      
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <a class="navbar-brand" href="index.php">WEBARC WEBÁRUHÁZ</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false"aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
       <ul class="navbar-nav">
-        <li class="nav-item">
-          <a class="nav-link" href="index.php">Főoldal</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="belepes.php">Kilépés</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="vasarlas.php">Vásárlás</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="cart.php">
-            <i class="fas fa-shopping-basket"></i>Kosár <span id="cart_count" class="text-danger bg-light">0</span>
-          </a>
-        </li>
+          <li class="nav-item">
+            <a class="nav-link" href="index.php">Főoldal</a>
+          </li>
+          <li class="nav-item bg-secondary rounded"><a class="nav-link" href="customerdatas.php">
+          <?php
+          if (isset($_SESSION["id"])) {
+             echo " Profilom";
+           } 
+          ?>
+          </a></li>
+          <li class="nav-item">
+            <a class="nav-link" href="vasarlas.php">Vásárlás</a>
+          </li>
+          <li class="nav-item">        
+            <a class="nav-link" href="cart.php">
+              <i class="fas fa-shopping-basket"></i>Kosár <span id="cart-result"></span>
+            </a>
+          </li>
+          <li class="nav-item"><a class="nav-link" href="logout.inc.php">
+          <?php
+          if (isset($_SESSION["id"])) {
+             echo " Kilépés";
+           } 
+          ?>
+          </a></li>
       </ul>
-    </nav>
-  </header>
+    </div>
+  </nav>
   
     <div class="container">
       <h2>Üdvözöljük</h2>
@@ -97,17 +121,16 @@
                 <input class="form-control" placeholder="Irányítószám" type="text" name="szampostcode" required>
 
                 <label for="city"><b>Város</b></label>
-                <input class="form-control" placeholder="Város" type="text" name="city" required>
+                <input class="form-control" placeholder="Város" type="text" name="szamcity" required>
 
                 <label for="address"><b>utca, házszám</b></label>
-                <input class="form-control" placeholder="utca, házszám" type="text" name="address" required>
+                <input class="form-control" placeholder="utca, házszám" type="text" name="szamddress" required>
 
                 <label for="taxnumber"><b>Adószám</b></label>
                 <input class="form-control" placeholder="Adószám" type="text" name="taxnumber" required>
 
                 <hr class="mb-3">
-                <button type="submit" class="btn btn-primary">Regisztráció</button>
-                <a href="belepes.php" class="btn btn-success">Mégse</a>
+                <button type="submit" name="savebutton" class="btn btn-primary">Mentés</button>
             </div>
             <br>
         </div>
@@ -115,5 +138,23 @@
     </div>
   </div> 
 </div>
+<script type="text/javascript">
+  $(document).ready(function() {
+
+  filter_cart();
+   function filter_cart()
+    {
+        var action = 'cart_item';
+        $.ajax({
+            url:"action.php",
+            method:"POST",
+            data:{action:action},
+            success:function(data){
+                $('#cart-result').html(data);
+            }
+        });
+    }
+});
+</script>
 </body>
 </html>
