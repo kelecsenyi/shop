@@ -1,11 +1,13 @@
 <?php 
+error_reporting(-1);
+ini_set('display_errors','on');
 session_start();
 if ($_SESSION['id']) {
 }
 else
 {
   header("location: login.php");
-}
+}    
 ?>
 <!DOCTYPE html>
 <html lang="hu" dir="ltr">
@@ -14,13 +16,15 @@ else
     <meta charset="utf-8">
     <!--style-->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <link rel="stylesheet" href="../css/adminstyle.css">
+    <link rel="stylesheet" href="../css/admin.css">
     <!-- ajax -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <!-- Popper JS -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
     <!-- Latest compiled JavaScript -->
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script> 
+    <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.2/css/bootstrap.min.css' />
+    <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.9.0/css/all.min.css' />
     <!-- ikonok -->
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css" integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" crossorigin="anonymous">
   </head>
@@ -57,50 +61,29 @@ else
 
     <div class="row">
       <div class="col sm-9 col-md-15 col-lg-15">
-        <div class="section-container">
-
-          <section class="">
-            <div class="title">
-              <div class="row">
-                <div class="OrderId">felhasználó azonosítója</div>
-                <div class="Items"> neve</div>
-              </div>
-            </div>
-            <div class="content" id="hide">
-              <div class="orderdata">
-                <div class="row">
-                  <div class="col-sm-3 col-md-4">
-                    <h4>Számlázási adatai</h4>
-                    <p>
-                      <b><!-- php kód, megrendelő neve-->Kelecsényi Balázs</b>
-                      <br>
-                      <!--php kód, cím-->1174 Budapest Dózsa György utca 15.
-                      <br>
-                      <!--php kód, telefonszám-->12345678910
-                      <br>
-                      <!--php kód, adószám-->12345-43-1
-                      <br>
-                    </p>
-                  </div>
-                  <div class="col-sm-3 col-md-4">
-                    <h4>Szállítási adatai</h4>
-                    <p>
-                      <b><!-- php kód, megrendelő neve-->Kelecsényi Balázs</b>
-                      <br>
-                      <!--php kód, cím-->1174 Budapest Dózsa György utca 15.
-                      <br>
-                      <!--php kód, telefonszám-->12345678910
-                      <br>
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </section>
+        <div class="section-container" id="result">
 
         </div>
       </div>
     </div>
   </div>
+  <script type="text/javascript">
+  $(document).ready(function() {
+
+  Users();
+    function Users()
+    {
+        var action = 'user';
+        $.ajax({
+            url:"usertemplate.php",
+            method:"POST",
+            data:{action:action},
+            success:function(data){
+                $('#result').html(data);
+            }
+        });
+    }
+});
+</script>
 </body>
 </html>

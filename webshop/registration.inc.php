@@ -1,4 +1,7 @@
 <?php
+		include ('config.php');
+		include ('configPDO.php');
+		include ('functions.inc.php');
 if (isset($_POST["regbutton"]))
 	{
 		$name = $_POST["name"];
@@ -16,11 +19,7 @@ if (isset($_POST["regbutton"]))
 		$taxnumber = $_POST["taxnumber"];
 
 
-		include ('config.php');
-		include ('configPDO.php');
-		include ('functions.inc.php');
-
-		if (invalid($name,$postcode,$szamname,$szampostcode) !== false) {
+		if (invalid($name,$postcode,$szamname,$szampostcode) == true) {
 			header("location: registration.php?error=einvaliduid");
 			exit();
 		}

@@ -60,7 +60,7 @@
 		    		header('location: vasarlas.php?notsucces=alreadyadd');
 	    			exit();
 		    	}
-	    	}	  	
+	    	}	  
 	}
 
 #-----------Kosárban lévő termékek száma-------------
@@ -135,47 +135,25 @@
 	  header('location:cart.php');
 	}
 
+#-----------Kosár frissítése-------------
 	if (isset($_POST['qty'])) {
-	  $qty = $_POST['qty'];
-	  $pid = $_POST['pid'];
-	  $pprice = $_POST['pprice'];
+		$qty = $_POST['qty'];
+		$pid = $_POST['pid'];
+		$pprice = $_POST['pprice'];
+		$tprice = $qty * $pprice;
 
-	  $tprice = $qty * $pprice;
-
-	  $stmt = $conn->prepare('UPDATE cart SET qty=?, total_price=? WHERE (userid=? AND product_code = ?) OR (currentuser = ? AND product_code = ?)');
-	  $stmt->bind_param('iiiiii',$qty,$tprice,$id,$productid,$currentuser,$productid);
-	  $stmt->execute();
+	  if (isset($_SESSION['id'])) {
+	  	  $id= $_SESSION['id'];
+		  $stmt = $conn->prepare('UPDATE cart SET qty = ?,total_price = ? WHERE id = ? AND userid = ?');
+		  $stmt->bind_param('iiii',$qty,$tprice,$pid,$id);
+		  $stmt->execute();
+		}
+		elseif (isset($_SESSION['currentuser'])) {
+		  $currentuser= $_SESSION['currentuser'];
+		  $stmt = $conn->prepare('UPDATE cart SET qty = ?,total_price = ? WHERE  id = ? AND currentuser = ?');
+		  $stmt->bind_param('iiii',$qty,$tprice,$pid,$currentuser);
+		  $stmt->execute();
+		}
 	}
-#------------Rendelés elkészítése-------------
-/*
-	if (isset($_POST['action']) && isset($_POST['action']) == 'order') {
-	  $name = $_POST['name'];
-	  $email = $_POST['email'];
-	  $phone = $_POST['phone'];
-	  $products = $_POST['products'];
-	  $grand_total = $_POST['grand_total'];
-	  $postcode = $_POST['postcode'];
-	  $pmode = $_POST['pmode'];
-	  $city = $_POST['city'];
-	  $address = $_POST['address'];
-	  $bname = $_POST['bname'];
-	  $bpostcode = $_POST['bpostcode'];
-	  $bcitys = $_POST['bcity'];
-	  $baddress = $_POST['baddress'];
-	  $taxnumber = $_POST['taxnumber'];
-	  $odate= date("Y-m-d h:i:sa");
 
-	  $data = '';
-
-	  $stmt = $conn->prepare('INSERT INTO orders (name,email,phone,postcode,city,address,bname,bpostcode,bcity,baddress,taxnumber,pmode,odate,products,amountpaid)VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)');
-	  $stmt->bind_param('ssiisssissssssi',$name,$email,$phone,$postcode,$city,$address,$bname,$bpostcode,$bcity,$baddress,$taxnumber,$pmode,$odate,$products,$grand_total);
-	  $stmt->execute();
-	  $stmt2 = $conn->prepare('DELETE FROM cart');
-	  $stmt2->execute();
-	  $data .= '<div class="text-center">
-								<h1 class="display-4 mt-2 text-danger">Thank You!</h1>
-								<h2 class="text-success">Your Order Placed Successfully!</h2>
-						  </div>';
-	  echo $data;
-	}*/
 ?>

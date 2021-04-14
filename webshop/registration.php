@@ -113,11 +113,11 @@ if (isset($_SESSION["id"])) {
               <label for="mobile"><b>Mobil</b></label>
               <input class="form-control" placeholder="Mobil" type="tel" maxlength="15" name="mobil" required>
 
-              <label for="password"><b>Jelszó</b></label>
-              <input class="form-control" placeholder="Jelszó" type="password" name="password"> 
+              <label for="passwordlabel"><b>Jelszó</b></label>
+              <input class="form-control" placeholder="Jelszó" type="text" name="password" required> 
 
               <label for="passwordagain"><b>Jelszó újra</b></label>
-              <input class="form-control" placeholder="Jelszó újra" type="password" name="repassword">
+              <input class="form-control" placeholder="Jelszó újra" type="text" name="repassword" required>
             </div>
 
             <div class="form-group">
@@ -149,19 +149,8 @@ if (isset($_SESSION["id"])) {
                 <label for="address"><b>utca, házszám</b></label>
                 <input class="form-control" placeholder="utca, házszám" type="text" name="szamaddress" required>
 
-                <table class="mt-2">
-                  <tr>
-                    <th><label for="checkbox">Jogi személy</label></th>
-                    <th><input type="checkbox" class="checkbox ml-2"  id="taxcode"></th>
-                  </tr>         
-                </table>
-
-                <div class="tax">
-                  <div class="result">
-                    <label for="taxnum"><b>Adószám</b></label><br>
-                    <input class="form-control" placeholder="Adószám" value="Nem vagyok jogi személy" type="text" name="taxnumber">
-                  </div>
-                </div>
+                <label for="taxnum"><b>Adószám</b></label><br>
+                <input class="form-control" placeholder="Adószám" value="Nem vagyok jogi személy" type="text" name="taxnumber">
 
                 <hr class="mb-3">
                 <button type="submit" name="regbutton" class="btn btn-primary">Regisztráció</button>
@@ -191,16 +180,6 @@ if (isset($_SESSION["id"])) {
               });
           }
       });
-    </script>
-<script>
-function active()
-{
-  if(document.getElementById('#taxcode').checked)
-     document.getElementById('#taxnumber').disabled=false;
-
-  else
-     document.getElementById('#taxnumber').disabled=true;
-}
 </script>
 </body>
 </html>

@@ -16,7 +16,7 @@ include('../configPDO.php');
     <meta charset="utf-8">
     <!--style-->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <link rel="stylesheet" href="../css/adminstyle.css">
+    <link rel="stylesheet" href="../css/admin.css">
     <!-- jQuery-->
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
     <!-- ajax -->
@@ -62,103 +62,29 @@ include('../configPDO.php');
 
     <div class="row">
       <div class="col sm-9 col-md-15 col-lg-15">
-        <div class="section-container">
-
-          <section class="">
-            <div class="title">
-              <div class="row">
-                <div class="OrderId">rendelés azonosítója</div>
-                <div class="Items"> 1 tétel 130 Ft értékben</div>
-                <div class="date">dátuma</div>
-              </div>
-            </div>
-            <div class="content" id="hide">
-              <div class="orderdata">
-                <div class="row">
-                  <div class="col-sm-3 col-md-4">
-                    <h4>Számlázási adatok</h4>
-                    <p>
-                      <b><!-- php kód, megrendelő neve-->Kelecsényi Balázs</b>
-                      <br>
-                      <!--php kód, cím-->1174 Budapest Dózsa György utca 15.
-                      <br>
-                      <!--php kód, telefonszám-->12345678910
-                      <br>
-                      <!--php kód, adószám-->234567-34-2
-                      <br>
-                    </p>
-                  </div>
-                  <div class="col-sm-3 col-md-4">
-                    <h4>Szállítási adatok</h4>
-                    <p>
-                      <b><!-- php kód, megrendelő neve-->Kelecsényi Balázs</b>
-                      <br>
-                      <!--php kód, cím-->1174 Budapest Dózsa György utca 15.
-                      <br>
-                      <!--php kód, telefonszám-->12345678910
-                      <br>
-                    </p>
-                  </div>
-                  <div class="col-sm-3 col-md-4">
-                    <h4>fizetési mód</h4>
-                    <p>
-                      <b>készpénz<!-- php kód, megrendelő neve--></b>
-                      <br>
-                    </p>
-                  </div>
-                </div>
-              </div>
-              <div class="basket">
-                <div class="table-responsive mt-2">
-                  <table class="table table-bordered table-striped text-center">
-                    <thead>
-                      <tr>
-                        <td colspan="7">
-                          <h4 class="text-center text-info m-0">Rendelt termékek</h4>
-                        </td>
-                      </tr>
-                      <tr>
-                      <th>Kép</th>
-                      <th>Megnevezés</th>
-                      <th>Mennyiség</th>
-                      <th>Ár</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                      <?php
-                        $stms =$conn->prepare("SELECT * FROM cart");
-                        $stms->execute();
-                        $result=$stms->get_result();
-                        $grand_total=0;
-                        while($row =$result->fetch_assoc())
-                        {
-                      ?>
-                      <tr>
-                        <td><img src="?= $row['cimage']?>" width="50"></td>
-                        <td><?= $row['cname']?></td>
-                        <td style="width: 70xp;"><?= $row['cquantity']?></td>
-                        <td><i></i><?= number_format($row['cprice'],2);?></td>
-                      </tr>
-                      <?php
-                        }
-                        ?>
-                      <?php $grand_total += $row['totalprice']; ?>
-                      
-                      <tr>
-                        <td colspan="3"><b>Teljes összeg:</b></td>
-                        <td><p><?= number_format($grand_total,2);?></p></td>
-                      </tr>
-                    </tbody>
-                  </table>
-                </div>
-              </div>
-            </div>
-
-          </section>
+        <div class="section-container" id="result">
           
         </div>
       </div>
     </div>
   </div>
+    <script type="text/javascript">
+  $(document).ready(function() {
+
+  Orders();
+    function Orders()
+    {
+        var action = 'order';
+        $.ajax({
+            url:"contenttemplate.php",
+            method:"POST",
+            data:{action:action},
+            success:function(data){
+                $('#result').html(data);
+            }
+        });
+    }
+});
+</script>
 </body>
 </html>
