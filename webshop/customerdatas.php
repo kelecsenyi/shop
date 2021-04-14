@@ -1,4 +1,6 @@
 <?php 
+error_reporting(-1);
+ini_set('display_errors','on');
 session_start();
 if ($_SESSION["id"]) {
 }
@@ -65,7 +67,7 @@ else
   </nav>
   
     <div class="container">
-      <h2>Üdvözöljük</h2>
+      <h2>Üdvözöljük <?php echo $_SESSION["name"];?></h2>
         <ul class="nav nav-pills">
           <li class="nav-item" style="margin-right: 10px;">
             <a class="nav-link" href="indexcustomer.php">Megrendeléseim</a>
@@ -82,57 +84,36 @@ else
 <div class="container">
   <div class="row justify-content-center">
     <div class="col-sm-4 col-md-5 col-lg-8">
-      <form action="" method="post">
+      <form action="customerdatas.inc.php" method="post">
         <div class="container">
-            <div class="form-group">
-              <h5>Kapcsolattartó adatai</h5>
-              <hr class="mb-3">
-              <label for="name"><b>Név</b></label>
-              <input class="form-control" placeholder="Név" type="text" name="name" required>
 
-              <label for="email"><b>Email</b></label>
-              <input class="form-control" placeholder="Email" type="text" name="email" required> 
+          <?php if (isset($_GET["succes"])) {if ($_GET["succes"]=="succesupdate")
+              {echo'<div class="alert alert-success" role="alert">Sikeres művelet!
+              <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button></div>';}}?>
 
-              <label for="mobile"><b>Mobil</b></label>
-              <input class="form-control" placeholder="Mobil" type="text" name="mobil" required>
+              <?php if (isset($_GET["error"])) {if ($_GET["error"]=="fail")
+              {echo'<div class="alert alert-danger" role="alert">Sikertelen művelet!
+              <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button></div>';}}?>
+
+              <?php if (isset($_GET["error"])) {if ($_GET["error"]=="einvaliduid")
+               {echo'<div class="alert alert-danger" role="alert">Elírt valamit!
+              <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button></div>';}}?>
+
+              <?php if (isset($_GET["error"])) {if ($_GET["error"]=="emailtaken")
+               {echo'<div class="alert alert-danger" role="alert">Válasszon másik email címet, ez már foglalt!
+              <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button></div>';}}?>
+
+            <div id="result">
+              
             </div>
-
-            <div class="form-group">
-              <h5>Szállítási adatok</h5>
-              <hr class="mb-3">
-
-              <label for="postcode"><b>Irányítószám</b></label>
-              <input class="form-control" placeholder="Irányítószám" type="text" name="postcode" required>
-
-              <label for="city"><b>Város</b></label>
-              <input class="form-control" placeholder="Város" type="text" name="city" required>
-
-              <label for="address"><b>utca, házszám</b></label>
-              <input class="form-control" placeholder="utca, házszám" type="text" name="address" required>
-            </div>
-            
-            <div class="form-group">
-                <h5>Számlázási adatok</h5>
-                <hr class="mb-3">
-                <label for="szamname"><b>Számlázási név</b></label>
-                <input class="form-control" placeholder="Számlázási név" type="text" name="szamname" required>
-
-                <label for="szampostcode"><b>Irányítószám</b></label>
-                <input class="form-control" placeholder="Irányítószám" type="text" name="szampostcode" required>
-
-                <label for="city"><b>Város</b></label>
-                <input class="form-control" placeholder="Város" type="text" name="szamcity" required>
-
-                <label for="address"><b>utca, házszám</b></label>
-                <input class="form-control" placeholder="utca, házszám" type="text" name="szamddress" required>
-
-                <label for="taxnumber"><b>Adószám</b></label>
-                <input class="form-control" placeholder="Adószám" type="text" name="taxnumber" required>
-
-                <hr class="mb-3">
-                <button type="submit" name="savebutton" class="btn btn-primary">Mentés</button>
-            </div>
-            <br>
         </div>
       </form>
     </div>
@@ -142,6 +123,7 @@ else
   $(document).ready(function() {
 
   filter_cart();
+  DataUpdate();
    function filter_cart()
     {
         var action = 'cart_item';
@@ -154,6 +136,20 @@ else
             }
         });
     }
+
+    function DataUpdate()
+    {
+        var action = 'update';
+        $.ajax({
+            url:"fetch_user_data.php",
+            method:"POST",
+            data:{action:action},
+            success:function(data){
+                $('#result').html(data);
+            }
+        });
+    }
+
 });
 </script>
 </body>

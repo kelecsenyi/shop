@@ -1,15 +1,13 @@
 <?php
-include ('config.php');
-include ('configPDO.php');
+require('config.php');
+#include ('configPDO.php');
 include ('functions.inc.php');
 if (isset($_POST["logbutton"])) 
 {
 	$email = $_POST["email"];
 	$password = $_POST["password"];
 
-	session_start();
- 	$_SESSION["szar"]=$password;
-	#loginUser($conn,$email,$password);
+	loginUser($conn,$email,$password);
 }
 else
 {

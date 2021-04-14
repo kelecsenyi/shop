@@ -1,43 +1,63 @@
- <section class="">
+<?php
+include('../configPDO.php');
+include('dbh.inc.php');
+if(isset($_POST['action']) && isset($_POST['action']) == 'order')
+{
+  $sql = "SELECT * FROM orders";
+  $statement = $db->prepare($sql);
+  $statement->execute();
+  $result = $statement->fetchAll(); 
+  $output = '';
+
+
+  foreach ($result as $row) 
+  {
+  $output .= '
+ <section class="mb-2">
             <div class="title">
               <div class="row">
-                <div class="OrderId">rendelés azonosítója</div>
-                <div class="Items"> 1 tétel 130 Ft értékben</div>
-                <div class="date">dátuma</div>
+                <div class="OrderId"> '.$row['id'].'</div>
+                <div class="Items"> '.$row['amountpaid'].' Ft</div>
+                <div class="date">'.$row['odate'].'</div>
               </div>
             </div>
-
-            <div class="content">
+            <div class="content" id="hide">
               <div class="orderdata">
                 <div class="row">
                   <div class="col-sm-3 col-md-4">
                     <h4>Számlázási adatok</h4>
                     <p>
-                      <b><!-- php kód, megrendelő neve-->Kelecsényi Balázs</b>
+                      <b>'.$row['bname'].'</b>
                       <br>
-                      <!--php kód, cím-->1174 Budapest Dózsa György utca 15.
+                      '.$row['bpostcode'].'
                       <br>
-                      <!--php kód, telefonszám-->12345678910
+                      '.$row['bcity'].'
+                      '.$row['baddress'].'
                       <br>
-                      <!--php kód, adószám-->123456-43-1
+                      '.$row['taxnumber'].'
                       <br>
                     </p>
                   </div>
                   <div class="col-sm-3 col-md-4">
                     <h4>Szállítási adatok</h4>
                     <p>
-                      <b><!-- php kód, megrendelő neve-->Kelecsényi Balázs</b>
+                      <b>'.$row['name'].'</b>
                       <br>
-                      <!--php kód, cím-->1174 Budapest Dózsa György utca 15.
+                      '.$row['postcode'].'
                       <br>
-                      <!--php kód, telefonszám-->12345678910
+                      '.$row['city'].'
+                      '.$row['address'].'
+                      <br>
+                      '.$row['email'].'
+                      <br>   
+                      '.$row['phone'].'
                       <br>
                     </p>
                   </div>
                   <div class="col-sm-3 col-md-4">
                     <h4>fizetési mód</h4>
                     <p>
-                      <b><!-- php kód, megrendelő neve-->online bankkártya</b>
+                      <b>'.$row['pmode'].'</b>
                       <br>
                     </p>
                   </div>
@@ -53,32 +73,19 @@
                         </td>
                       </tr>
                       <tr>
-                      <th>Kép</th>
-                      <th>Megnevezés</th>
-                      <th>Mennyiség</th>
-                      <th>Ár</th>
+                        <th>Megnevezés</th>
+                        <th>Mennyiség</th>
+                        <th>Végösszeg</th>
                     </tr>
                     </thead>
                     <tbody>
-                      <?php
-                        require 'config.php';
-                        $stms =$conn->prepare("SELECT * FROM cart");
-                        $stms->execute();
-                        $result=$stms->get_result();
-                        $grand_total=0;
-                        while($row =$result->fetch_assoc());
-                      ?>
                       <tr>
-                        <td><img src="?= $row['cimage']?>" width="50"></td>
-                        <td><?= $row['cname']?></td>
-                        <td style="width: 70xp;"><?= $row['cquantity']?></td>
-                        <td><i></i><?= number_format($row['cprice'],2);?></td>
-                      </tr>
-                      <?php $grand_total +=$row['totalprice']; ?>
-                      
+                        <td>'.$row['products'].'</td>
+                        <td><i></i>'.$row['qty'].'</td>
+                      </tr>                 
                       <tr>
-                        <td colspan="3"><b>Teljes összeg:</b></td>
-                        <td><p><?= number_format($grand_total,2);?></p></td>
+                        <td colspan="2"><b>Teljes összeg:</b></td>
+                        <td><p>'.$row['amountpaid'].' Ft</p></td>
                       </tr>
                     </tbody>
                   </table>
@@ -86,3 +93,12 @@
               </div>
             </div>
           </section>
+          ';
+  }
+}
+else
+{
+  $output ='<h3>Nincs megjeleníthető találat!</3>';
+}
+ echo $output;
+?>

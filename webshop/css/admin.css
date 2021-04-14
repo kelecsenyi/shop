@@ -23,12 +23,12 @@
 	width: 100%;
 	display: table;
 }
-
-.content
-{
+.title:hover + #hide{
 	display: block;
 }
-
+#hide{
+	display: none;
+}
 .orderdata
 {
 	border:1px solid #dfdfdf;

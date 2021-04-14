@@ -4,18 +4,65 @@ ini_set('display_errors','on');
 session_start();
 if (isset($_SESSION["id"])) {
 
+  require 'config.php';
+
+   $grand_total = 0;
+    $allItems = '';
+    $items = [];
+    $allqty='';
+    $qtys=[];
+
+    $sql = "SELECT product_name,total_price,qty FROM cart WHERE userid = '".$_SESSION["id"]."'";
+    $stmt = $conn->prepare($sql);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    while ($row = $result->fetch_assoc()) {
+
+    $grand_total += $row['total_price'];
+    $items[] = $row['product_name'];
+    $qtys[] = $row['qty'];
+
+    }
+    $allItems = implode(', ', $items);
+    $allqty = implode(', ', $qtys);
+
+    if ($grand_total == 0) {
+      header('location: vasarlas.php');
+    }
 }
 else
 {
   if (isset($_SESSION["currentuser"])) {
-      
-  }
-  else
-  {
-      header('location: cart.php');
-      exit();
-  }
+       require 'config.php';
 
+        $grand_total = 0;
+        $allItems = '';
+        $items = [];
+        $allqty='';
+        $qtys=[];
+
+        $sql = "SELECT product_name,total_price,qty FROM cart WHERE currentuser = '".$_SESSION["currentuser"]."'";
+        $stmt = $conn->prepare($sql);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        while ($row = $result->fetch_assoc()) {
+
+          $grand_total += $row['total_price'];
+          $items[] = $row['product_name'];
+          $qtys[] = $row['qty'];
+        }
+        $allItems = implode(', ', $items);
+        $allqty = implode(', ', $qtys);
+        
+        if ($grand_total == 0) {
+          header('location: vasarlas.php');
+        }
+    }
+    else
+    {
+        header('location: vasarlas.php');
+        exit();
+    }
 }
 ?>
 <!DOCTYPE html>
@@ -81,39 +128,157 @@ else
   <div class="container">
     <div class="row justify-content-center">
       <div class="col-lg-6 px-4 pb-4" id="order">
+
+        <?php if (isset($_GET["error"])) {if ($_GET["error"]=="einvaliduid")
+               {echo'<div class="alert alert-danger" role="alert">Elírt valamit!
+              <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button></div>';}}?>
+
         <h4 class="text-center text-info p-2">Rendelés véglegesítése!</h4>
         <div class="jumbotron p-3 mb-2 text-center">
-          <h6 class="lead"><b>Termék(ek) : </b><?php $allItems; ?></h6>
+          <h6 class="lead"><b>Termék(ek) : </b><?php echo $allItems; ?></h6>
           <h6 class="lead"><b>Szállítási költség : </b>Ingyenes</h6>
-          <h5><b>Végösszeg : </b><?php number_format($grand_total) ?></h5>
+          <h5><b>Végösszeg : </b><?php echo $grand_total; ?> Ft</h5>
         </div>
-        <form action="" method="post" id="placeOrder">
-          <input type="hidden" name="products" value="<?= $allItems; ?>">
-          <input type="hidden" name="grand_total" value="<?= $grand_total; ?>">
+        <form action="order.inc.php" method="POST" id="placeOrder">
+          <?php
+          if (isset($_SESSION["id"])) {
+
+              require 'config.php';
+              $sqluser = "SELECT * FROM user WHERE id = '".$_SESSION["id"]."'";
+              $stmtu = $conn->prepare($sqluser);
+              $stmtu->execute();
+              $resultu = $stmtu->get_result();
+              $output = '';
+              while ($row = $resultu->fetch_assoc()) {
+                $output .='
+
+          <input type="hidden" name="products" value="'. $allItems.'">
+          <input type="hidden" name="grand_total" value="'. $grand_total.'">
+          <input type="hidden" name="qty" value="'.$allqty.'">
+ 
           <div class="form-group">
-            <input type="text" name="name" class="form-control" placeholder="Enter Name" required>
+            <h5>Kapcsolattartó adatai</h5>
+              <hr class="mb-3">
+              <label for="name"><b>Név</b></label>
+              <input class="form-control" placeholder="Név" type="text" name="name" value="'. $row['name'].'" required>
+
+              <label for="email"><b>Email</b></label>
+              <input class="form-control" placeholder="Email" type="email" name="email" value="'. $row['email'].'" required> 
+
+              <label for="mobile"><b>Mobil</b></label>
+              <input class="form-control" placeholder="Mobil" type="tel" name="phone" maxlength="15" value="'. $row['mobil'].'" required>
           </div>
           <div class="form-group">
-            <input type="email" name="email" class="form-control" placeholder="Enter E-Mail" required>
+            <h5>Szállítási adatok</h5>
+              <hr class="mb-3">
+              <label for="postcode"><b>Irányítószám</b></label>
+              <input class="form-control" placeholder="Irányítószám" type="text" name="postcode" maxlength="4" value="'. $row['postcode'].'" required>
+
+              <label for="city"><b>Város</b></label>
+              <input class="form-control" placeholder="Város" type="text" name="city" value="'. $row['city'].'" required>
+
+              <label for="address"><b>utca, házszám</b></label>
+              <input class="form-control" placeholder="utca, házszám" type="text" name="address" value="'. $row['address'].'" required>
           </div>
           <div class="form-group">
-            <input type="tel" name="phone" class="form-control" placeholder="Enter Phone" required>
-          </div>
-          <div class="form-group">
-            <input name="address" class="form-control" placeholder="Enter Delivery Address Here..."></input>
+            <h5>Számlázási adatok</h5>
+                <hr class="mb-3">
+                <label for="szamname"><b>Számlázási név</b></label>
+                <input class="form-control" placeholder="Számlázási név" type="text" name="bname" value="'. $row['billname'].'" required>
+
+                <label for="szampostcode"><b>Irányítószám</b></label>
+                <input class="form-control" placeholder="Irányítószám" type="text" name="bpostcode" maxlength="4" value="'. $row['billpostcode'].'" required>
+
+                <label for="city"><b>Város</b></label>
+                <input class="form-control" placeholder="Város" type="text" name="bcity" value="'. $row['billcity'].'" required>
+
+                <label for="address"><b>utca, házszám</b></label>
+                <input class="form-control" placeholder="utca, házszám" type="text" name="baddress" value="'. $row['billaddress'].'" required>
+
+                <label for="taxnumber"><b>Adószám</b></label>
+                <input class="form-control" placeholder="Adószám" type="text" name="taxnumber" value="'. $row['taxcode'].'" required>
           </div>
           <h6 class="text-center lead">Fizetés mód</h6>
           <div class="form-group">
             <select name="pmode" class="form-control">
               <option value="" selected disabled>-Válassza ki hogyan fizet-</option>
-              <option value="cod">Utánvét</option>
-              <option value="netbanking">Online bankkártya</option>
-              <option value="cards">Bankkártya</option>
+              <option value="Utánvét">Utánvét</option>
+              <option value="Online bankkártya">Online bankkártya</option>
+              <option value="Bankkártya">Bankkártya</option>
             </select>
           </div>
           <div class="form-group">
-            <input type="submit" name="submit" value="Place Order" class="btn btn-danger btn-block">
+            <input type="submit" name="submit" value="Rendelés leadása!" class="btn btn-danger btn-block">
+          </div> 
+             ';
+            }
+            echo $output;
+          }
+          elseif (isset($_SESSION["currentuser"])) {
+            echo('
+          <input type="hidden" name="products" value="'. $allItems.'">
+          <input type="hidden" name="grand_total" value="'. $grand_total.'">
+          <input type="hidden" name="qty" value="'.$allqty.'">
+
+          <div class="form-group">
+            <h5>Kapcsolattartó adatai</h5>
+              <hr class="mb-3">
+              <label for="name"><b>Név</b></label>
+              <input class="form-control" placeholder="Név" type="text" name="name" required>
+
+              <label for="email"><b>Email</b></label>
+              <input class="form-control" placeholder="Email" type="email" name="email" required> 
+
+              <label for="mobile"><b>Mobil</b></label>
+              <input class="form-control" placeholder="Mobil" type="tel" name="phone" maxlength="15" required>
           </div>
+          <div class="form-group">
+            <h5>Szállítási adatok</h5>
+              <hr class="mb-3">
+              <label for="postcode"><b>Irányítószám</b></label>
+              <input class="form-control" placeholder="Irányítószám" type="text" name="postcode" maxlength="4" required>
+
+              <label for="city"><b>Város</b></label>
+              <input class="form-control" placeholder="Város" type="text" name="city"required>
+
+              <label for="address"><b>utca, házszám</b></label>
+              <input class="form-control" placeholder="utca, házszám" type="text" name="address" required>
+          </div>
+          <div class="form-group">
+            <h5>Számlázási adatok</h5>
+                <hr class="mb-3">
+                <label for="szamname"><b>Számlázási név</b></label>
+                <input class="form-control" placeholder="Számlázási név" type="text" name="bname" required>
+
+                <label for="szampostcode"><b>Irányítószám</b></label>
+                <input class="form-control" placeholder="Irányítószám" type="text" name="bpostcode" maxlength="4"required>
+
+                <label for="city"><b>Város</b></label>
+                <input class="form-control" placeholder="Város" type="text" name="bcity" required>
+
+                <label for="address"><b>utca, házszám</b></label>
+                <input class="form-control" placeholder="utca, házszám" type="text" name="baddress"  required>
+
+                <label for="taxnumber"><b>Adószám</b></label>
+                <input class="form-control" placeholder="Adószám" type="text" name="taxnumber" value="Nem vagyok jogi személy" required>
+          </div>
+          <h6 class="text-center lead">Fizetés mód</h6>
+          <div class="form-group">
+            <select name="pmode" class="form-control">
+              <option value="" selected disabled>-Válassza ki hogyan fizet-</option>
+              <option value="Utánvét">Utánvét</option>
+              <option value="Online bankkártya">Online bankkártya</option>
+              <option value="Bankkártya">Bankkártya</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <input type="submit" name="currentsubmit" value="Rendelés leadása!" class="btn btn-danger btn-block">
+          </div>
+              ');
+          }
+          ?>
         </form>
       </div>
     </div>
@@ -124,20 +289,7 @@ else
 
   <script type="text/javascript">
   $(document).ready(function() {
-
-    $("#placeOrder").submit(function(e) {
-      e.preventDefault();
-      $.ajax({
-        url: 'action.php',
-        method: 'post',
-        data: $('form').serialize() + "&action=order",
-        success: function(response) {
-          $("#order").html(response);
-        }
-      });
-    });
-
-    
+  
     filter_cart();
       function filter_cart()
       {
@@ -153,6 +305,5 @@ else
       }
   });
   </script>
-
 </body>
 </html>

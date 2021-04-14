@@ -1,4 +1,4 @@
-#cart_count
+#cart-item
 {
 	text-align: center;
 	padding:0.3rem 0.5rem 0.3rem 0.5rem;
@@ -29,12 +29,12 @@
 	width: 100%;
 	display: table;
 }
-
-.content
-{
+.title:hover + #hide{
 	display: block;
 }
-
+#hide{
+	display: none;
+}
 .orderdata
 {
 	border:1px solid #dfdfdf;
@@ -58,4 +58,9 @@ p
 body
 {
 	background-color:lightgray;
+}
+.basket
+{
+	background-color: white;
+	border:solid 1px lightgray;
 }

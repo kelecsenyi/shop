@@ -147,47 +147,48 @@ if (isset($_SESSION["id"])) {
                   $stmt->execute();
                   $result = $stmt->get_result();
                 }
+
                 $grand_total = 0;
                 while ($row = $result->fetch_assoc()):
               ?>
               <tr>
-                <td><?= $row['product_code'] ?></td>
-                <input type="hidden" class="pid" value="<?php $row['product_code'] ?>">
-                <td><img src="<?= $row['product_image'] ?>" width="50"></td>
-                <td><?= $row['product_name'] ?></td>
-                <td><?= number_format($row['product_price']); ?> Ft</td>
-                <input type="hidden" class="pprice" value="<?= $row['product_price'] ?>">
-                <td>
-                  <input type="number" min="0" max="999" class="form-control itemQty" value="<?= $row['qty'] ?>" style="width:75px;">
-                </td>
-                <td><?= number_format($row['total_price']); ?> Ft</td>
-                <td>
-                  <?php
-                  if (isset($_SESSION["id"])) {
-                   $userid= $_SESSION['id'];
-                   $output = '<a href="action.php?remove='. $row['product_code'].'&userid='. $_SESSION['id'].'" onclick="filter_cart()" class="text-danger lead" onclick="return confirm(Biztosan törli ezt az elemet?)"><i class="fas fa-trash-alt"></i></a> '; 
-                    echo $output;
-                  }
-                  else
-                  {
-                    $currentuser= $_SESSION['currentuser'];
-                    $output = '<a href="action.php?remove='. $row['product_code'].'&currentuser='. $_SESSION['currentuser'].'" onclick="filter_cart()" class="text-danger lead" onclick="return confirm(Biztosan törli ezt az elemet?)"><i class="fas fa-trash-alt"></i></a> ';  
-                    echo $output;
-                  }                 
-                  ?>
-                </td>
+                  <td><?= $row['product_code'] ?></td>
+                  <input type="hidden" class="pid" value="<?= $row['id'] ?>">
+                  <td><img src="<?= $row['product_image'] ?>" width="50"></td>
+                  <td><?= $row['product_name'] ?></td>
+                  <td><?= number_format($row['product_price']); ?> Ft</td>
+                    <input type="hidden" class="pprice" value="<?= $row['product_price'] ?>">
+                  <td>
+                    <input type="number" min="0" max="999" class="form-control qty" value="<?= $row['qty'] ?>" style="width:75px;">
+                  </td>
+                  <td><?= number_format($row['total_price']); ?> Ft</td>
+                  <td>
+                    <?php
+                    if (isset($_SESSION["id"])) {
+                     $userid= $_SESSION['id'];
+                     $output = '<a href="action.php?remove='. $row['product_code'].'&userid='. $_SESSION['id'].'" onclick="filter_cart()" class="text-danger lead" onclick="return confirm(Biztosan törli ezt az elemet?)"><i class="fas fa-trash-alt"></i></a> '; 
+                      echo $output;
+                    }
+                    else
+                    {
+                      $currentuser= $_SESSION['currentuser'];
+                      $output = '<a href="action.php?remove='. $row['product_code'].'&currentuser='. $_SESSION['currentuser'].'" onclick="filter_cart()" class="text-danger lead" onclick="return confirm(Biztosan törli ezt az elemet?)"><i class="fas fa-trash-alt"></i></a> ';  
+                      echo $output;
+                    }                 
+                    ?>
+                  </td>
               </tr>
               <?php $grand_total += $row['total_price']; ?>
               <?php endwhile; ?>
               <tr>
-                <td colspan="3">
-                  <a href="vasarlas.php" class="btn btn-success"><i class="fas fa-cart-plus"></i>Vásárlás folytatása</a>
-                </td>
-                <td colspan="2"><b>Teljes ár</b></td>
-                <td><b><?= number_format($grand_total); ?> Ft</b></td>
-                <td>
-                  <a href="checkout.php" class="btn btn-info <?= ($grand_total > 1) ? '' : 'disabled'; ?>"><i class="far fa-credit-card"></i>Összesítés</a>
-                </td>
+                  <td colspan="3">
+                    <a href="vasarlas.php" class="btn btn-success"><i class="fas fa-cart-plus"></i>Vásárlás folytatása</a>
+                  </td>
+                  <td colspan="2"><b>Teljes ár</b></td>
+                  <td><b><?= number_format($grand_total); ?> Ft</b></td>
+                  <td>
+                    <a href="checkout.php" class="btn btn-info <?= ($grand_total > 1) ? '' : 'disabled'; ?>"><i class="far fa-credit-card"></i>Összesítés</a>
+                  </td>
               </tr>
             </tbody>
           </table>
@@ -195,31 +196,25 @@ if (isset($_SESSION["id"])) {
       </div>
     </div>
   </div>
-
   <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js'></script>
   <script src='https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.2/js/bootstrap.min.js'></script>
-
   <script type="text/javascript">
   $(document).ready(function() {
 
-    $(".itemQty").on('change',function() {
+    $(".qty").on('change',function() {
       var $el = $(this).closest('tr');
 
       var pid = $el.find(".pid").val();
       var pprice = $el.find(".pprice").val();
-      var qty = $el.find(".itemQty").val();
-     location.reload(true);
+      var qty = $el.find(".qty").val();
+
+      var action = 'actionup';
       $.ajax({
         url: 'action.php',
         method: 'POST',
-        cache: false,
-        data: {
-          qty: qty,
-          pid: pid,
-          pprice: pprice
-        },
+        data: {action:action,qty:qty,pid:pid,pprice:pprice},
         success: function(response) {
-          console.log(response);
+         location.reload(true);
         }
       });
     });

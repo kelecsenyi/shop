@@ -3,7 +3,7 @@ error_reporting(-1);
 ini_set('display_errors','on');
 session_start();
 if (isset($_SESSION["id"])) {
-
+  
    }
    else
    {
@@ -86,7 +86,7 @@ if (isset($_SESSION["id"])) {
           {echo'<div class="alert alert-danger" role="alert">Helytelen jelszó!
           <button type="button" class="close" data-dismiss="alert" aria-label="Close">
             <span aria-hidden="true">&times;</span>
-          </button></div>';}}?>
+          </button></div>';}} ?>
 
     <div class="container mt-4">     
      <form action="login.inc.php" method="POST">
@@ -108,7 +108,6 @@ if (isset($_SESSION["id"])) {
             <a class="btn btn-warning" href="registration.php">Regisztráció</a>
           </div>
         </div>
-        <?php   echo '<br>'.$_SESSION['szar'].''; ?>
       </form>
     </div>
     <script type="text/javascript">

@@ -36,7 +36,6 @@ if (isset($_POST["deletebutton"]))
 	}
 	else
 	{
-		echo "nem jó";
 		header("location: update.php");
 	}
 ?>

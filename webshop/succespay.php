@@ -2,12 +2,18 @@
 error_reporting(-1);
 ini_set('display_errors','on');
 session_start();
-if (isset($_SESSION["id"])) 
-    {}
-  else
-  {
-    header('location: cart.php');
-  }
+if (isset($_SESSION["id"])) {
+
+   }
+   else
+   {
+    if (isset($_SESSION["currentuser"])) {
+      
+    }
+    else
+    {
+    }
+   }
 ?>
 
 <!DOCTYPE html>
@@ -18,15 +24,12 @@ if (isset($_SESSION["id"]))
 
     <!--style-->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
-    <link rel="stylesheet" href="css/succespay.css">
-    <!-- jQuery first-->
-    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-    <!-- ajax -->
+    <link rel="stylesheet" href="css/succespaystyle.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <!-- Popper JS -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
-    <!-- Latest compiled JavaScript -->
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <!--JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script> 
     <!--ikonok-->
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css" integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" crossorigin="anonymous">
   </head>
@@ -57,7 +60,7 @@ if (isset($_SESSION["id"]))
           </li>
           <li class="nav-item">        
             <a class="nav-link" href="cart.php">
-              <i class="fas fa-shopping-basket"></i>Kosár <span id="cart_count" class="text-danger bg-light">0</span>
+              <i class="fas fa-shopping-basket"></i>Kosár <span id="cart-item" class="text-danger bg-light">0</span>
             </a>
           </li>
           <li class="nav-item"><a class="nav-link" href="logout.inc.php">
@@ -71,8 +74,8 @@ if (isset($_SESSION["id"]))
     </div>
   </nav>
   
-  <div class="container">
-    <div class="col justify-content-center py-3">
+  <div class="container mt-3">
+    <div class="col content-center">
       <h1>Sikeres Tranzakció!</h1>
       <p><b>Rendelése feldolgozását kollégáink hamarosan megkezdik!</b></p>
     </div>

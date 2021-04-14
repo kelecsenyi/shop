@@ -1,4 +1,6 @@
 <?php 
+error_reporting(-1);
+ini_set('display_errors','on');
 session_start();
 if ($_SESSION["id"]) {
 }
@@ -65,7 +67,7 @@ else
   </nav>
   
     <div class="container">
-      <h2>Üdvözöljük</h2>
+      <h2>Üdvözöljük <?php echo $_SESSION["name"];?></h2>
         <ul class="nav nav-pills">
           <li class="nav-item" style="margin-right: 10px;">
             <a class="nav-link" href="indexcustomer.php">Megrendeléseim</a>
@@ -82,7 +84,7 @@ else
   <div class="container">
     <div class="row justify-content-center">
       <div class="col-sm-4 col-md-5 col-lg-8">
-        <form action="customerpwd.inc.php" method="post">
+        <form action="customerpwd.inc.php" method="POST">
           <div class="container">
 
             <?php if (isset($_GET["error"])) {if ($_GET["error"]=="pwddontmatch")
@@ -104,10 +106,10 @@ else
               </button></div>';}}?>
 
               <div class="form-group">
-                <label for="password"><b>Jelszó</b></label>
+                <label for="passwordlabel"><b>Jelszó</b></label>
                 <input class="form-control" placeholder="Jelszó" type="text" name="password" required> 
 
-                <label for="repassword"><b>Jelszó újra</b></label>
+                <label for="repasswordlabel"><b>Jelszó újra</b></label>
                 <input class="form-control" placeholder="Jelszó újra" type="text" name="repassword" required>
                 <hr class="mb-3">
                 <button type="submit" name="savepwd" class="btn btn-primary">Mentés</button>
