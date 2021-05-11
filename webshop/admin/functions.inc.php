@@ -14,7 +14,7 @@
 	function invalidUid($username)
 	{
 		$result;
-		if (!preg_match("/^[a-zA-Z0-9]*$/", $username)) {
+		if (!preg_match("/^[a-zA-Z]*$/", $username)) {
 			$result=true;
 		}
 		else{

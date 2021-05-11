@@ -1,6 +1,5 @@
 <?php
 require('config.php');
-#include ('configPDO.php');
 include ('functions.inc.php');
 if (isset($_POST["logbutton"])) 
 {
@@ -14,9 +13,4 @@ else
 	header("location:belepes.php");
 	exit();
 }
-/*if (emptyInputLogin($email,$password) !== false) 
-	{
-		header("location:belepes.php?error=emptyinput");
-		exit();
-	}*/
 ?>

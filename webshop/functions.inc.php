@@ -60,23 +60,6 @@
 		$num = $result->fetch_assoc();
 		if ($num['num'] > 0) 
 		{
-			/*mysqli_stmt_close($stmte);	
-			$sql = "SELECT id,password FROM user WHERE email = ?";
-			$stmt = $conn->prepare($sql); 
-			$stmt->bind_param("s",$email);
-			$stmt->execute();
-			$resultp = $stmt->get_result();
-			if ($row = $resultp->fetch_assoc()) 
-			{		    
-			  	return $row;
-			}
-			else
-			{
-				 $res=false;
-				 return $res;
-			 }
-			
-			return $res; id, password*/
 			$sql = "SELECT * FROM user WHERE email = '$email'";
 			$result = mysqli_query($conn, $sql);
 
@@ -142,17 +125,7 @@
  		elseif ($checkpwd===true) {
  			session_start();
  			$_SESSION["id"]=$row["id"];
- 			$_SESSION["name"]=$row["name"];/*
- 			$_SESSION["email"]=$row["email"];
- 			$_SESSION["mobil"]=$row["mobil"];
- 			$_SESSION["postcode"]=$row["postcode"];
- 			$_SESSION["city"]=$row["city"];
- 			$_SESSION["address"]=$row["address"];
- 			$_SESSION["billname"]=$row["billname"];
- 			$_SESSION["billpostcode"]=$row["billpostcode"];
- 			$_SESSION["billcity"]=$row["billcity"];
- 			$_SESSION["billaddress"]=$row["billaddress"];
- 			$_SESSION["taxcode"]=$row["taxcode"];*/
+ 			$_SESSION["name"]=$row["name"];
 
  			header("location: indexcustomer.php");
  			exit();
@@ -176,17 +149,6 @@
 	 			exit();
 	 		}
  	}
- 	/*function emptyInputLogin($email,$password)
-	{
-		$result;
-		if (empty($email)||empty($password)) {
-			$result=true;
-		}
-		else{
-			$result=false;
-		}
-		return $result;
-	}*/
 #------------------------ Update user functions -------------------------------
 
  	function updateDatas($conn,$name,$email,$mobil,$postcode,$city,$address,$szamname,$szampostcode,$szamcity,$szamaddress,$taxnumber,$id)
@@ -205,18 +167,6 @@
 	 		$stmt->bind_param("sssisssisssi",$name,$email,$mobil,$postcode,$city,$address,$szamname,$szampostcode,$szamcity,$szamaddress,$taxnumber,$id);
 	 		if ($stmt->execute()) {
 	 			header("location: customerdatas.php?succes=succesupdate");
-	 			/*session_start();
-	 			unset($_SESSION["name"],
-	 			$_SESSION["email"],
-	 			$_SESSION["mobil"],
-	 			$_SESSION["postcode"],
-	 			$_SESSION["city"],
-	 			$_SESSION["address"],
-	 			$_SESSION["billname"],
-	 			$_SESSION["billpostcode"],
-	 			$_SESSION["billcity"],
-	 			$_SESSION["billaddress"],
-	 			$_SESSION["taxcode"]);*/
 	 			exit();
 	 		}
 	 		else
@@ -233,36 +183,7 @@
 		mysqli_stmt_close($stmt);	
 		
  	}
-/*
- 	function deleteProduct($conn,$pcode)
- 	{
- 		$sqlexist = "SELECT pname FROM products WHERE pcode = (?)";
-		$stmte = $conn->prepare($sqlexist); 
-		$stmte->bind_param("s",$pcode);
-
-		if ($stmte->execute() && $pcode!=="0") {
-			mysqli_stmt_close($stmte);
-			$sql = "DELETE FROM products WHERE pcode = ?";
-		 	$stmt = $conn->prepare($sql);
-			$stmt->bind_param("s",$pcode);
-			if ($stmt->execute())
-			{
-				header("location: update.php?succes=succesupdate");
-				exit();
-			}
-			else
-			{
-				header("location: update.php?error=fail");
-				exit();
-			}
-		}
-		else
-		{
-			header("location: update.php?error=fail");
-			exit();
-		}
-		mysqli_stmt_close($stmt);
- 	}*/
+ 	
  	function emailExist($conn,$email,$id)
  	{
  		$res=true;
@@ -300,11 +221,43 @@
 		$stmt = $conn->prepare('INSERT INTO orders (name,email,phone,postcode,city,address,bname,bpostcode,bcity,baddress,taxnumber,pmode,odate,products,qty,amountpaid,userid)VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)');
 	 	$stmt->bind_param('sssisssisssssssii',$name,$email,$phone,$postcode,$city,$address,$bname,$bpostcode,$bcity,$baddress,$taxnumber,$pmode,$odate,$products,$qty,$grand_total,$id);
 	 	$stmt->execute();
+				
+				$sql = "SELECT id, product_code FROM cart WHERE userid = ?";
+				$stmteq = $conn->prepare($sql); 
+				$stmteq->bind_param("i",$id);
+				$stmteq->execute();
+				$result = $stmteq->get_result();
+
+				while ($pcodes= $result->fetch_assoc())  
+				{
+					$bin = $pcodes["product_code"];
+					$sqlo = "SELECT pquantity FROM products WHERE pcode = ?";
+					$stmto = $conn->prepare($sqlo);
+					$stmto->bind_param("s",$bin);
+					$stmto->execute();
+					$resulto = $stmto->get_result();
+					$qtyo= $resulto->fetch_assoc();
+
+					$sqlq = "SELECT qty,product_code FROM cart WHERE userid = ? AND product_code = ?";
+					$stmteq = $conn->prepare($sqlq); 
+					$stmteq->bind_param("is",$id,$bin);
+					$stmteq->execute();
+					$resultq = $stmteq->get_result();
+					$qtys= $resultq->fetch_assoc();
+
+					$newqty = $qtyo["pquantity"] - $qtys["qty"];
+					$sqlup = "UPDATE products SET pquantity = ? WHERE pcode = ?";
+					$stmt = $conn->prepare($sqlup);
+					$stmt->bind_param("is",$newqty,$qtys["product_code"]);
+					$stmt->execute();		
+				}
+
 	 	$stmt2 = $conn->prepare("DELETE FROM cart WHERE userid = '".$_SESSION["id"]."'");
 	 	$stmt2->execute();
+		mysqli_stmt_close($stmt);
 	 	header('location: succespay.php');
 	  	exit();
-	  	mysqli_stmt_close($stmt);
+	  	
 	}
 
 	function currentOrder($conn,$name,$email,$phone,$products,$grand_total,$postcode,$pmode,$city,$address,$bname,$bpostcode,$bcity,$baddress,$taxnumber,$odate,$id,$qty)
@@ -312,6 +265,37 @@
 		$stmt = $conn->prepare('INSERT INTO orders (name,email,phone,postcode,city,address,bname,bpostcode,bcity,baddress,taxnumber,pmode,odate,products,qty,amountpaid,currentuser)VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)');
 	 	$stmt->bind_param('sssisssisssssssii',$name,$email,$phone,$postcode,$city,$address,$bname,$bpostcode,$bcity,$baddress,$taxnumber,$pmode,$odate,$products,$qty,$grand_total,$id);
 	 	$stmt->execute();
+
+	 	$sql = "SELECT id, product_code FROM cart WHERE currentuser = ?";
+				$stmteq = $conn->prepare($sql); 
+				$stmteq->bind_param("i",$id);
+				$stmteq->execute();
+				$result = $stmteq->get_result();
+
+				while ($pcodes= $result->fetch_assoc())  
+				{
+					$bin = $pcodes["product_code"];
+					$sqlo = "SELECT pquantity FROM products WHERE pcode = ?";
+					$stmto = $conn->prepare($sqlo);
+					$stmto->bind_param("s",$bin);
+					$stmto->execute();
+					$resulto = $stmto->get_result();
+					$qtyo= $resulto->fetch_assoc();
+
+					$sqlq = "SELECT qty,product_code FROM cart WHERE currentuser = ? AND product_code = ?";
+					$stmteq = $conn->prepare($sqlq); 
+					$stmteq->bind_param("is",$id,$bin);
+					$stmteq->execute();
+					$resultq = $stmteq->get_result();
+					$qtys= $resultq->fetch_assoc();
+
+					$newqty = $qtyo["pquantity"] - $qtys["qty"];
+					$sqlup = "UPDATE products SET pquantity = ? WHERE pcode = ?";
+					$stmt = $conn->prepare($sqlup);
+					$stmt->bind_param("is",$newqty,$qtys["product_code"]);
+					$stmt->execute();		
+				}
+
 	  $stmt2 = $conn->prepare("DELETE FROM cart WHERE currentuser = '".$_SESSION["currentuser"]."'");
 	  if ($stmt2->execute()) {
 	  	session_start();

@@ -135,6 +135,16 @@
 	  header('location:cart.php');
 	}
 
+	if (isset($_GET['clear'])) {
+	  $userid = $_GET['userid'];
+	  $stmt = $conn->prepare('DELETE FROM cart WHERE currentuser = ?');
+	  $stmt->bind_param('i',$userid);
+	  $stmt->execute();
+	  $_SESSION['showAlert'] = 'block';
+	  $_SESSION['message'] = 'Minden termék kikerült a kosarából!';
+	  header('location:cart.php');
+	}
+
 #-----------Kosár frissítése-------------
 	if (isset($_POST['qty'])) {
 		$qty = $_POST['qty'];

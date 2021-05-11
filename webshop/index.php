@@ -87,9 +87,9 @@ if (isset($_SESSION["id"])) {
         </p>
         <p>
           Weboldalunk maszkok és teljesálarcok kereskedésével foglalkozik.
-          Ha már regisztrált nálunk vagy regisztrálni szeretne, akkor nyomjon a Belépek! gombra. Amennyiben regisztrálás nélkül szeretne rendelni, akkor egyszerüen nyomjon a Vásárolok! gombra.
+          Ha már regisztrált nálunk vagy regisztrálni szeretne, akkor nyomjon a Belépek! gombra. Amennyiben regisztrálás nélkül szeretne rendelni, akkor egyszerűen nyomjon a Vásárolok! gombra.
         </p>
-        <a href="vasarlas.php" class="btn btn-success">Vásárolok!</a>
+        <a href="vasarlas.php" class="btn btn-success">Vásárólok!</a>
         <a href="belepes.php" class="btn btn-primary">Belépek!</a>
       </div>
     </div>

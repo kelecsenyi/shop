@@ -9,10 +9,11 @@ if (isset($_SESSION["id"])) {
    $grand_total = 0;
     $allItems = '';
     $items = [];
+
     $allqty='';
     $qtys=[];
 
-    $sql = "SELECT product_name,total_price,qty FROM cart WHERE userid = '".$_SESSION["id"]."'";
+    $sql = "SELECT product_name,total_price,qty,product_code FROM cart WHERE userid = '".$_SESSION["id"]."'";
     $stmt = $conn->prepare($sql);
     $stmt->execute();
     $result = $stmt->get_result();

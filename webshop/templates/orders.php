@@ -18,9 +18,9 @@ if(isset($_POST['action']) && isset($_POST['action']) == 'order')
  <section class="mb-2">
             <div class="title">
               <div class="row">
-                <div class="OrderId">Rendelés azonosítója: '.$row['id'].'</div>
-                <div class="Items">Fizetett összeg: '.$row['amountpaid'].' Ft</div>
-                <div class="date">Rendelés dátuma: '.$row['odate'].'</div>
+                <div class="col OrderId">Rendelés azonosítója: '.$row['id'].'</div>
+                <div class="col Items">Fizetett összeg: '.$row['amountpaid'].' Ft</div>
+                <div class="col date">Dátum: '.$row['odate'].'</div>
               </div>
             </div>
             <div class="content" id="hide">
